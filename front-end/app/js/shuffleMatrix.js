@@ -49,6 +49,38 @@ var ShuffleMatrix = function()
         console.log("=================================================================");
     };
 
+    this.displayMatrixConsoleX = function (baseMatrix)
+    {
+        console.log("");
+        console.log("=================================================================");
+        for (var i = 0; i < baseMatrix[0].length; i++)
+        {
+            if (i == 0)
+            {
+                process.stdout.write("  |\t");
+            }
+            process.stdout.write(i + "\t");
+        }
+        console.log("");
+        console.log("=================================================================");
+        for (var i = 0; i < baseMatrix.length; i++) {
+            for (var j = 0; j < baseMatrix[i].length; j++) {
+                //console.log(fila1[i][j] );
+                if (j == 0) {
+                    process.stdout.write(i + " |\t");
+                }
+                //console.log(fila1[i][j]);
+                //process.stdout.write("X\t");
+                //process.stdout.write(baseMatrix[i][j] + "\t");
+                process.stdout.write("X\t");
+            }
+            console.log("");
+            console.log("");
+        }
+        console.log("=================================================================");
+    };
+
+
     this.getColumnArray = function(index, matrix)
     {
         var columnArray = [];
@@ -88,12 +120,15 @@ var ShuffleMatrix = function()
     this.shuffleMatrixBase = function(baseMatrix)
     {
         //console.log("Before Row: ")
-        //displayMatrix(baseMatrix);
+        //this.displayMatrix(baseMatrix);
 
         var shuffleRow1 = [[]];
         var shuffleRow2 = [[]];
         var shuffleColumn1= [[]];
         var shuffleColumn2= [[]];
+
+        //console.log("ES.................... "+Array.isArray(baseMatrix[0]))
+
         for (var i = 0; i<baseMatrix.length; i++)
         {
             shuffleRow1[i] = this.shuffle(baseMatrix[i]);

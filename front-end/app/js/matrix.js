@@ -1,4 +1,5 @@
 var shuffleMatrixTest = require('./shuffleMatrix.js');
+
 /*
  * MAIN CLASS
  * */
@@ -15,4 +16,11 @@ var baseMatrix = [
     ["I", "J", "K", "L", "M", "N", "O", "P"]
 ];
 
-shuffleMatrixTest.displayMatrixConsole(shuffleMatrixTest.shuffleMatrixBase(baseMatrix));
+shuffleMatrixTest.displayMatrixConsoleX(shuffleMatrixTest.shuffleMatrixBase(baseMatrix));
+
+var showGameOption = function()
+{
+    console.log("\t\t\t1 - Re-start the Game");
+    console.log("\t\t\t2 - End the game");
+    console.log("\t\t\t3 - Go main menu");
+}
