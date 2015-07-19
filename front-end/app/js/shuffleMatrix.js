@@ -23,6 +23,7 @@ var ShuffleMatrix = function()
     {
         console.log("");
         console.log("=================================================================");
+        //TODO, here is failing
         for (var i = 0; i < baseMatrix[0].length; i++)
         {
             if (i == 0)

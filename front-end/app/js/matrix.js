@@ -24,3 +24,4 @@ var showGameOption = function()
     console.log("\t\t\t2 - End the game");
     console.log("\t\t\t3 - Go main menu");
 }
+

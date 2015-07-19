@@ -44,7 +44,7 @@ var baseMatrixX = [
     ["X", "X", "X", "X", "X", "X", "X", "X"]
 ];
 
-var guessBaseMatrixOneCoord = function(x, y, baseMatrix, baseMatrixX)
+var showLetterBaseMatrixX = function(x, y, baseMatrix, baseMatrixX)
 {
     //console.log("CHAR: "+baseMatrix[Number(x)][Number(y)]);
     baseMatrixX[Number(x)][Number(y)] = baseMatrix[Number(x)][Number(y)];
@@ -58,6 +58,17 @@ var guessBaseMatrixTwoCoord = function(x0, y0, x1, y1, baseMatrix, baseMatrixX)
     //console.log(baseMatrixX);
     return baseMatrixX;
 }
+
+var revertBaseMatrixToX = function(x0, y0, x1, y1, baseMatrixX)
+{
+    //TODO, check out of array
+    //console.log("CHAR: "+baseMatrix[Number(x)][Number(y)]);
+    baseMatrixX[Number(x0)][Number(y0)] = "X";
+    baseMatrixX[Number(x1)][Number(y1)] = "X";
+    //console.log(baseMatrixX);
+    return baseMatrixX;
+}
+
 
 var getValue = function(x, y, baseMatrix)
 {
