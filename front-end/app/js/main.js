@@ -1,18 +1,20 @@
 /*
-* MAIN CLASS
-* */
-
-/*
  * MAIN CLASS
  * */
 
+var colors = require('colors');
+var ShuffleMatrix = require('./shuffleMatrix.js');
+var Util = require('./utils.js');
+var MatrixOperation = require('./matrix.js');
+var Menu = require('./showMenu.js');
 
+var utilIns = new Util();
+var shuffleMatrixIns = new ShuffleMatrix();
+var matrixOperationInst = new MatrixOperation();
+var menu = new Menu();
 
-var shuffleMatrixTest = require('./shuffleMatrix.js');
-
-var regexImputCoord = /^[0-7][0-7]$/;
-
-Array.prototype.equals = function (array, strict) {
+Array.prototype.equals = function (array, strict)
+{
     if (!array)
         return false;
 
@@ -38,126 +40,33 @@ Array.prototype.equals = function (array, strict) {
 }
 
 
-
 var coordMatched = [];
 var coordMatchedAux = [];
 
-var revertBaseMatrix = function(x0, y0, x1, y1, baseMatrixX)
-{
-    //TODO, check out of array
-    //console.log("CHAR: "+baseMatrix[Number(x)][Number(y)]);
-    baseMatrixX[Number(x0)][Number(y0)] = "X";
-    baseMatrixX[Number(x1)][Number(y1)] = "X";
-    //console.log(baseMatrixX);
-    return baseMatrixX;
-}
-
-/*
- var baseMatrix = [
- ["A", "B", "C", "D", "E", "F", "G", "H"],
- ["I", "J", "K", "L", "M", "N", "O", "P"],
- ["A", "B", "C", "D", "E", "F", "G", "H"],
- ["I", "J", "K", "L", "M", "N", "O", "P"]
- ];
-
- var baseMatrixX = [
- ["X", "X", "X", "X", "X", "X", "X", "X"],
- ["X", "X", "X", "X", "X", "X", "X", "X"],
- ["X", "X", "X", "X", "X", "X", "X", "X"],
- ["X", "X", "X", "X", "X", "X", "X", "X"]
- ];
-
-
- var baseMatrix = [
- ["A", "B", "C"],
- ["D", "E", "F"],
- ["A", "B", "C"],
- ["D", "E", "F"]
- ];
-
- var baseMatrixX = [
- ["X", "X", "X"],
- ["X", "X", "X"],
- ["X", "X", "X"],
- ["X", "X", "X"]
- ];
- */
 
 var baseMatrix = [
-    ["A", "B"],
-    ["A", "B"]
+    ["A", "B", "C"],
+    ["D", "E", "F"],
+    ["A", "B", "C"],
+    ["D", "E", "F"]
 ];
 
 var baseMatrixX = [
-    ["X", "X"],
-    ["X", "X"]
+    ["X", "X", "X"],
+    ["X", "X", "X"],
+    ["X", "X", "X"],
+    ["X", "X", "X"]
 ];
 
 var baseMatrixXAux = [
-    ["X", "X"],
-    ["X", "X"]
+    ["X", "X", "X"],
+    ["X", "X", "X"],
+    ["X", "X", "X"],
+    ["X", "X", "X"]
 ];
-
-
-var showLetterBaseMatrixX = function(x, y, baseMatrix, baseMatrixX)
-{
-    //console.log("CHAR: "+baseMatrix[Number(x)][Number(y)]);
-    baseMatrixX[Number(x)][Number(y)] = baseMatrix[Number(x)][Number(y)];
-    //console.log(baseMatrixX);
-    return baseMatrixX;
-}
-
-
-var getLetterBaseMatrix = function(x, y, baseMatrix)
-{
-    var letter = baseMatrix[Number(x)][Number(y)];
-    return letter;
-}
-
-var clearScreen = function()
-{
-    process.stdout.write("\u001b[2J\u001b[0;0H");
-}
-var startGame = function(baseMatrix)
-{
-    showMainOption();
-    var shuffledBaseMatrix  = shuffleMatrixTest.shuffleMatrixBase(baseMatrix);
-    readImputMain(shuffledBaseMatrix);
-}
-
-var showMainOption = function()
-{
-    console.log("");
-    console.log("\t====================================================");
-    console.log("");
-    console.log("\t\t\t1 - Start new Game");
-    console.log("\t\t\t2 - Exit");
-    console.log("");
-    console.log("\t====================================================");
-    console.log("");
-    console.log("");
-}
-
-var showGameOption = function()
-{
-
-    console.log("");
-    console.log("\t\t\t1 - Re-start the Game");
-    console.log("\t\t\t2 - Show the game");
-    console.log("\t\t\t3 - Go main menu");
-    console.log("\t\t\t4 - Exit");
-    console.log("");
-
-}
-
 
 var readImputMain = function(shuffledBaseMatrix)
 {
-    var baseMatrixX = [
-        ["X", "X"],
-        ["X", "X"]
-    ];
-
     var startGameFlag = false;
     var readlineMain = require('readline');
     var rlMain = readlineMain.createInterface({
@@ -167,15 +76,15 @@ var readImputMain = function(shuffledBaseMatrix)
         //hidden: true
     });
     rlMain.prompt();
-    var prefix = 'Main> ';
+    var prefix = 'Main> Enter the option: ';
 
     rlMain.on('line', function (line)
     {
         switch (line.trim())
         {
             case '1':
-                clearScreen();
-                shuffleMatrixTest.displayMatrixConsole(baseMatrixX);
+                utilIns.clearScreen();
+                matrixOperationInst.displayMatrixConsole(baseMatrixX);
                 startGameFlag = true;
                 rlMain.close();
                 break;
@@ -185,7 +94,7 @@ var readImputMain = function(shuffledBaseMatrix)
                 break;
             default:
                 console.log('Wrong value, try again!!');
-                //prefix = 'Main> ';
+//                prefix = 'Main> Enter the option: ';
                 break;
         }
         if(!startGameFlag)
@@ -195,20 +104,21 @@ var readImputMain = function(shuffledBaseMatrix)
 
     }).on('close', function () {
 
-        showGameOption();
-        readImputGame(true, shuffledBaseMatrix, baseMatrixX);
+        menu.showGameOption();
+        readImputGame(true, shuffledBaseMatrix);
     });
 
-    rlMain.setPrompt(prefix  + 'Enter the option: ', prefix.length);
+    rlMain.setPrompt(prefix, prefix.length);
     rlMain.prompt();
 }
 
-
-var readImputGame = function(gameInProgress, shuffledBaseMatrix, baseMatrixX)
+var readImputGame = function(gameInProgress, shuffledBaseMatrix)
 {
-    var baseMatrixXAux = [
-        ["X", "X"],
-        ["X", "X"]
+    var baseMatrixX = [
+        ["X", "X", "X"],
+        ["X", "X", "X"],
+        ["X", "X", "X"],
+        ["X", "X", "X"]
     ];
 
     var firstCoordGot = false;
@@ -229,24 +139,24 @@ var readImputGame = function(gameInProgress, shuffledBaseMatrix, baseMatrixX)
         switch (line.trim())
         {
             case '1':
-                clearScreen();
+                utilIns.clearScreen();
                 gameInProgress = true;
-                shuffledBaseMatrix  = shuffleMatrixTest.shuffleMatrixBase(shuffledBaseMatrix);
-                //TODO here with new matrix XXX
+                shuffledBaseMatrix  = shuffleMatrixIns.shuffleMatrixBase(shuffledBaseMatrix);
+                //TODO here wiuth new matrix XXX
                 baseMatrixX = baseMatrixXAux;
-                shuffleMatrixTest.displayMatrixConsole(baseMatrixX);
-                showGameOption();
+                matrixOperationInst.displayMatrixConsole(baseMatrixX);
+                menu.showGameOption();
                 prefix = 'Game:'+gameInProgress+'> Enter the FIRST coordinate ie. ##: ';
                 break;
             case '2':
-                clearScreen();
+                utilIns.clearScreen();
                 gameInProgress = false;
-                shuffleMatrixTest.displayMatrixConsole(shuffledBaseMatrix);
-                showGameOption();
+                matrixOperationInst.displayMatrixConsole(shuffledBaseMatrix);
+                menu.showGameOption();
                 prefix = 'Game: '+gameInProgress+'> Enter the option: ';
                 break;
             case '3':
-                clearScreen();
+                utilIns.clearScreen();
                 gameInProgress = false;
                 var prefix = 'Main> Enter the option: ';
                 rlGame.close();
@@ -258,73 +168,76 @@ var readImputGame = function(gameInProgress, shuffledBaseMatrix, baseMatrixX)
             default:
                 if(gameInProgress)
                 {
-                    if(regexImputCoord.test(line.trim()))
+                    if(utilIns.regexImputCoord.test(line.trim()))
                     {
-                            if (!firstCoordGot)
+                        if(!firstCoordGot) {
+                            if (coordMatchedAux.indexOf(line.trim()) > -1) {
+                                utilIns.clearScreen();
+                                matrixOperationInst.displayMatrixConsole(baseMatrixX);
+                                console.log("\nCoord. already entered, try other one!\n");
+                                menu.showGameOption();
+                            }
+                            else
                             {
-                                if(coordMatchedAux.indexOf(line.trim()) > -1)
-                                {
-                                    clearScreen();
-                                    shuffleMatrixTest.displayMatrixConsole(baseMatrixX);
-                                    console.log("\nCoord. already entered, try other one!\n");
-                                    showGameOption();
-                                }
-                                else
-                                {
-                                    coordX0 = line.trim()[0];
-                                    coordY0 = line.trim()[1];
-                                    firstCoordGot = true;
-                                    clearScreen();
-                                    baseMatrixX = showLetterBaseMatrixX(coordX0, coordY0, shuffledBaseMatrix, baseMatrixX);
-                                    shuffleMatrixTest.displayMatrixConsole(baseMatrixX);
-                                    showGameOption();
+                                coordX0 = line.trim()[0];
+                                coordY0 = line.trim()[1];
+                                firstCoordGot = true;
 
-                                    prefix = 'Game: ' + gameInProgress + '> Enter the SECOND coordinate ie. ##:';
+                                utilIns.clearScreen();
+                                baseMatrixX = matrixOperationInst.showLetterBaseMatrixX(coordX0, coordY0, shuffledBaseMatrix, baseMatrixX);
+                                matrixOperationInst.displayMatrixConsole(baseMatrixX);
+                                menu.showGameOption();
+                            }
+                            prefix = 'Game: '+gameInProgress+'> Enter the SECOND coordinate ie. ##:';
+                        }
+                        else if(!secondCoordGot)
+                        {
+                            coordX1 = line.trim()[0];
+                            coordY1 = line.trim()[1];
+                            firstCoordGot =  false;
+
+                            utilIns.clearScreen();
+                            baseMatrixX = matrixOperationInst.showLetterBaseMatrixX(coordX1, coordY1,shuffledBaseMatrix, baseMatrixX);
+                            matrixOperationInst.displayMatrixConsole(baseMatrixX);
+
+                            var firstLetter = matrixOperationInst.getLetterBaseMatrix(coordX0, coordY0, shuffledBaseMatrix);
+                            var secondLetter = matrixOperationInst.getLetterBaseMatrix(coordX1, coordY1, shuffledBaseMatrix);
+                            if(firstLetter != secondLetter)
+                            {
+                                baseMatrixX = matrixOperationInst.revertBaseMatrix(coordX0, coordY0, coordX1, coordY1,baseMatrixX);
+                                console.log(colors.red("\nThe letters do not match, try again!"));
+
+                            }
+                            else
+                            {
+                                coordMatchedAux[coordMatchedAux.length] = coordX0+coordY0;
+                                coordMatchedAux[coordMatchedAux.length] = line;
+                                console.log(colors.green("\nGood, you guessed one letter = "+coordMatchedAux));
+
+                                if(shuffledBaseMatrix.equals(baseMatrixX))
+                                {
+                                    gameInProgress = false;
+                                    coordMatchedAux = [];
+                                    console.log(colors.green("YOU WIN, CONGRATULATIONS!!!!!"));
+
                                 }
+
+                            }
+                            menu.showGameOption();
+                            if(!gameInProgress) {
+                                prefix = 'Game: ' + gameInProgress + '> Enter the option:';
+                            }
+                            else {
                                 prefix = 'Game: ' + gameInProgress + '> Enter the FIRST coordinate ie. ##:';
                             }
-                            else if (!secondCoordGot) {
-                                coordX1 = line.trim()[0];
-                                coordY1 = line.trim()[1];
-                                firstCoordGot = false;
-
-                                clearScreen();
-                                baseMatrixX = showLetterBaseMatrixX(coordX1, coordY1, shuffledBaseMatrix, baseMatrixX);
-                                shuffleMatrixTest.displayMatrixConsole(baseMatrixX);
-
-                                var firstLetter = getLetterBaseMatrix(coordX0, coordY0, shuffledBaseMatrix);
-                                var secondLetter = getLetterBaseMatrix(coordX1, coordY1, shuffledBaseMatrix);
-                                if (firstLetter != secondLetter) {
-                                    baseMatrixX = revertBaseMatrix(coordX0, coordY0, coordX1, coordY1, baseMatrixX);
-                                    console.log("\n\tCAGAMOS, INTENAT");
-                                }
-                                else {
-                                    coordMatchedAux[coordMatchedAux.length] = coordX0 + coordY0;
-                                    coordMatchedAux[coordMatchedAux.length] = line;
-                                    console.log("\n\tMuy BINE, pudiste UNO = " + coordMatchedAux);
-
-                                    if (shuffledBaseMatrix.equals(baseMatrixX)) {
-                                        gameInProgress = false;
-                                        coordMatchedAux = [];
-                                        console.log("GANASTE GANASTE GANASTE!!!!!!");
-                                    }
-
-                                }
-                                showGameOption();
-                                if (!gameInProgress) {
-                                    prefix = 'Game: ' + gameInProgress + '> Enter the option:';
-                                }
-                                else {
-                                    prefix = 'Game: ' + gameInProgress + '> Enter the FIRST coordinate ie. ##:';
-                                }
-                            }
+                        }
                     }
                     else
                     {
-                        clearScreen();
-                        shuffleMatrixTest.displayMatrixConsole(baseMatrixX);
-                        showGameOption();
-                        console.log('\nWrong coordinate value, try again ie. \'05\'.\n');
+                        utilIns.clearScreen();
+                        matrixOperationInst.displayMatrixConsole(baseMatrixX);
+                        menu.showGameOption();
+                        console.log('\nWrong coordinate value, try again ie. \'01\'.\n');
                         if(firstCoordGot)
                         {
                             prefix = 'Game: '+gameInProgress+'> Enter the SECOND coordinate ie. ##:';
@@ -346,8 +259,8 @@ var readImputGame = function(gameInProgress, shuffledBaseMatrix, baseMatrixX)
         rlGame.prompt();
 
     }).on('close', function () {
-        showMainOption();
-        readImputMain();
+        menu.showMainOption();
+        readImputMain(shuffleMatrixIns.shuffleMatrixBase(baseMatrix));
     });
 
     if(!firstCoordGot)
@@ -362,6 +275,12 @@ var readImputGame = function(gameInProgress, shuffledBaseMatrix, baseMatrixX)
     }
 }
 
+var startGame = function(baseMatrix)
+{
+    menu.showMainOption();
+    shuffledBaseMatrix  = shuffleMatrixIns.shuffleMatrixBase(baseMatrix);
+    readImputMain(shuffledBaseMatrix);
+}
+
+
 startGame(baseMatrix);
-
-
